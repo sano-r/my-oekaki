@@ -16,12 +16,12 @@ export function App() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
+    <div className="flex flex-col items-center justify-center min-h-screen p-4">
       <canvas
         ref={canvasRef}
         width={800}
         height={600}
-        className="border border-black"
+        className="border border-black w-full max-w-4xl h-auto"
       ></canvas>
       <br />
       <button
