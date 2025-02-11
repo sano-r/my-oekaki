@@ -1,25 +1,42 @@
-import React, { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
 
-  const startDrawing = (e: React.MouseEvent) => {
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (canvas) {
+      canvas.addEventListener("mousedown", startDrawing);
+      canvas.addEventListener("mousemove", draw);
+      canvas.addEventListener("mouseup", stopDrawing);
+      canvas.addEventListener("mouseleave", stopDrawing);
+
+      return () => {
+        canvas.removeEventListener("mousedown", startDrawing);
+        canvas.removeEventListener("mousemove", draw);
+        canvas.removeEventListener("mouseup", stopDrawing);
+        canvas.removeEventListener("mouseleave", stopDrawing);
+      };
+    }
+  }, [isDrawing]);
+
+  const startDrawing = (e: MouseEvent) => {
     if (canvasRef.current) {
       const ctx = canvasRef.current.getContext("2d");
       if (ctx) {
         ctx.beginPath();
-        ctx.moveTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
+        ctx.moveTo(e.offsetX, e.offsetY);
         setIsDrawing(true);
       }
     }
   };
 
-  const draw = (e: React.MouseEvent) => {
+  const draw = (e: MouseEvent) => {
     if (isDrawing && canvasRef.current) {
       const ctx = canvasRef.current.getContext("2d");
       if (ctx) {
-        ctx.lineTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
+        ctx.lineTo(e.offsetX, e.offsetY);
         ctx.stroke();
       }
     }
@@ -47,8 +64,8 @@ export function App() {
         ref={canvasRef}
         width={800}
         height={600}
-        onMouseDown={startDrawing}
-        onMouseMove={draw}
+        onMouseDown={() => startDrawing}
+        onMouseMove={() => draw}
         onMouseUp={stopDrawing}
         onMouseLeave={stopDrawing}
         className="border border-black"
