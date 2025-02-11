@@ -17,6 +17,8 @@ export function App() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4">
+      <h1 className="text-2xl font-bold">お絵描きアプリ</h1>
+      <br />
       <canvas
         ref={canvasRef}
         width={800}
