@@ -31,6 +31,15 @@ export function App() {
     setDrawingSettings({ color: tempColor, lineWidth: tempLineWidth });
   };
 
+  const clearCanvas = () => {
+    if (canvasRef.current) {
+      const ctx = canvasRef.current.getContext("2d");
+      if (ctx) {
+        ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+      }
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4">
       <h1 className="text-2xl font-bold">お絵描きアプリ</h1>
@@ -67,13 +76,20 @@ export function App() {
         height={600}
         className="border border-black w-full max-w-4xl h-auto"
       ></canvas>
-      <br />
-      <button
-        onClick={downloadImage}
-        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
-      >
-        Download
-      </button>
+      <div className="flex items-center space-x-4 mb-2">
+        <button
+          onClick={clearCanvas}
+          className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700"
+        >
+          Clear
+        </button>
+        <button
+          onClick={downloadImage}
+          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+        >
+          Download
+        </button>
+      </div>
     </div>
   );
 }
