@@ -7,11 +7,17 @@ export function App() {
 
   const downloadImage = () => {
     if (canvasRef.current) {
-      const image = canvasRef.current.toDataURL("image/png");
-      const link = document.createElement("a");
-      link.href = image;
-      link.download = "drawing.png";
-      link.click();
+      try {
+        const image = canvasRef.current.toDataURL("image/png");
+        const link = document.createElement("a");
+        link.href = image;
+        link.download = "drawing.png";
+        link.click();
+      } catch (error) {
+        console.error("Failed to download the image: ", error);
+      }
+    } else {
+      console.error("Canvas reference is null.");
     }
   };
 
