@@ -2,14 +2,10 @@ import { useRef, useState } from "react";
 import { useDrawing } from "./hooks/useDrawing";
 
 export function App() {
-  const [drawingSettings, setDrawingSettings] = useState({
-    color: "#000000",
-    lineWidth: 5,
-  });
-  const [tempColor, setTempColor] = useState(drawingSettings.color);
-  const [tempLineWidth, setTempLineWidth] = useState(drawingSettings.lineWidth);
+  const [color, setColor] = useState("#000000");
+  const [lineWidth, setLineWidth] = useState(5);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  useDrawing(canvasRef, drawingSettings.color, drawingSettings.lineWidth);
+  useDrawing(canvasRef, color, lineWidth);
 
   const downloadImage = () => {
     if (canvasRef.current) {
@@ -25,10 +21,6 @@ export function App() {
     } else {
       console.error("Canvas reference is null.");
     }
-  };
-
-  const applySettings = () => {
-    setDrawingSettings({ color: tempColor, lineWidth: tempLineWidth });
   };
 
   const clearCanvas = () => {
@@ -49,8 +41,8 @@ export function App() {
           Color:
           <input
             type="color"
-            value={tempColor}
-            onChange={(e) => setTempColor(e.target.value)}
+            value={color}
+            onChange={(e) => setColor(e.target.value)}
             className="border rounded ml-1"
           />
         </label>
@@ -58,17 +50,11 @@ export function App() {
           Line width:
           <input
             type="number"
-            value={tempLineWidth}
-            onChange={(e) => setTempLineWidth(Number(e.target.value))}
+            value={lineWidth}
+            onChange={(e) => setLineWidth(Number(e.target.value))}
             className="border rounded w-16 ml-1"
           />
         </label>
-        <button
-          onClick={applySettings}
-          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700"
-        >
-          Apply
-        </button>
       </div>
       <canvas
         ref={canvasRef}
