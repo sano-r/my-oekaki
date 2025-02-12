@@ -32,6 +32,11 @@ export function App() {
     }
   };
 
+  const handleLineWidthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/^0+/, ""); // 先頭の0を削除
+    setLineWidth(value === "" ? 0 : Number(value)); // 空の場合は0に設定
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4">
       <h1 className="text-2xl font-bold">お絵描きアプリ</h1>
@@ -51,7 +56,9 @@ export function App() {
           <input
             type="number"
             value={lineWidth}
-            onChange={(e) => setLineWidth(Number(e.target.value))}
+            min="1"
+            step="1"
+            onChange={handleLineWidthChange}
             className="border rounded w-16 ml-1"
           />
         </label>
