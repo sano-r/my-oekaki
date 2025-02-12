@@ -1,9 +1,11 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useDrawing } from "./hooks/useDrawing";
 
 export function App() {
+  const [color, setColor] = useState("#000000");
+  const [lineWidth, setLineWidth] = useState(5);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  useDrawing(canvasRef);
+  useDrawing(canvasRef, color, lineWidth);
 
   const downloadImage = () => {
     if (canvasRef.current) {
@@ -25,6 +27,26 @@ export function App() {
     <div className="flex flex-col items-center justify-center min-h-screen p-4">
       <h1 className="text-2xl font-bold">お絵描きアプリ</h1>
       <br />
+      <div className="flex space-x-4">
+        <label>
+          Color:
+          <input
+            type="color"
+            value={color}
+            onChange={(e) => setColor(e.target.value)}
+            className="border rounded ml-1"
+          />
+        </label>
+        <label>
+          Line width:
+          <input
+            type="number"
+            value={lineWidth}
+            onChange={(e) => setLineWidth(Number(e.target.value))}
+            className="border rounded w-16 ml-1"
+          />
+        </label>
+      </div>
       <canvas
         ref={canvasRef}
         width={800}

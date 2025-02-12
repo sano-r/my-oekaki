@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 
 export const useDrawing = (
-  canvasRef: React.RefObject<HTMLCanvasElement | null>
+  canvasRef: React.RefObject<HTMLCanvasElement | null>,
+  color: string,
+  lineWidth: number
 ) => {
   const [isDrawing, setIsDrawing] = useState(false);
 
@@ -9,22 +11,24 @@ export const useDrawing = (
     const rect = canvas.getBoundingClientRect();
     return {
       x: (evt.clientX - rect.left) * (canvas.width / rect.width),
-      y: (evt.clientY - rect.top) * (canvas.height / rect.height)
+      y: (evt.clientY - rect.top) * (canvas.height / rect.height),
     };
   };
-  
+
   const startDrawing = (e: MouseEvent) => {
     if (canvasRef.current) {
       const ctx = canvasRef.current.getContext("2d");
       if (ctx) {
         const pos = getMousePos(canvasRef.current, e);
         ctx.beginPath();
-        ctx.moveTo(pos.x, pos.y);;
+        ctx.moveTo(pos.x, pos.y);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = lineWidth;
         setIsDrawing(true);
       }
     }
   };
-  
+
   const draw = (e: MouseEvent) => {
     if (isDrawing && canvasRef.current) {
       const ctx = canvasRef.current.getContext("2d");
@@ -48,7 +52,7 @@ export const useDrawing = (
       canvas.width = canvas.clientWidth;
       canvas.height = canvas.clientHeight;
     }
-  }, []);
+  }, [canvasRef]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -56,13 +60,13 @@ export const useDrawing = (
     const handleMouseMove = (e: MouseEvent) => draw(e);
     const handleMouseUp = () => stopDrawing();
     const handleMouseLeave = () => stopDrawing();
-  
+
     if (canvas) {
       canvas.addEventListener("mousedown", handleMouseDown);
       canvas.addEventListener("mousemove", handleMouseMove);
       canvas.addEventListener("mouseup", handleMouseUp);
       canvas.addEventListener("mouseleave", handleMouseLeave);
-  
+
       return () => {
         if (canvas) {
           canvas.removeEventListener("mousedown", handleMouseDown);
