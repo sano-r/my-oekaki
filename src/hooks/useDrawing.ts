@@ -56,6 +56,15 @@ export const useDrawing = (
 
   useEffect(() => {
     const canvas = canvasRef.current;
+    const ctx = canvas?.getContext("2d");
+    if (ctx) {
+      ctx.strokeStyle = color;
+      ctx.lineWidth = lineWidth;
+    }
+  }, [color, lineWidth]);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
     const handleMouseDown = (e: MouseEvent) => startDrawing(e);
     const handleMouseMove = (e: MouseEvent) => draw(e);
     const handleMouseUp = () => stopDrawing();
@@ -76,7 +85,7 @@ export const useDrawing = (
         }
       };
     }
-  }, [canvasRef, isDrawing]);
+  }, [canvasRef, isDrawing, color, lineWidth]);
 
   return { isDrawing };
 };
