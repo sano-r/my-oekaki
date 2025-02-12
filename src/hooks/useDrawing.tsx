@@ -34,20 +34,27 @@ export const useDrawing = (
 
   useEffect(() => {
     const canvas = canvasRef.current;
+    const handleMouseDown = (e: MouseEvent) => startDrawing(e);
+    const handleMouseMove = (e: MouseEvent) => draw(e);
+    const handleMouseUp = () => stopDrawing();
+    const handleMouseLeave = () => stopDrawing();
+
     if (canvas) {
-      canvas.addEventListener("mousedown", startDrawing);
-      canvas.addEventListener("mousemove", draw);
-      canvas.addEventListener("mouseup", stopDrawing);
-      canvas.addEventListener("mouseleave", stopDrawing);
+      canvas.addEventListener("mousedown", handleMouseDown);
+      canvas.addEventListener("mousemove", handleMouseMove);
+      canvas.addEventListener("mouseup", handleMouseUp);
+      canvas.addEventListener("mouseleave", handleMouseLeave);
 
       return () => {
-        canvas.removeEventListener("mousedown", startDrawing);
-        canvas.removeEventListener("mousemove", draw);
-        canvas.removeEventListener("mouseup", stopDrawing);
-        canvas.removeEventListener("mouseleave", stopDrawing);
+        if (canvas) {
+          canvas.removeEventListener("mousedown", handleMouseDown);
+          canvas.removeEventListener("mousemove", handleMouseMove);
+          canvas.removeEventListener("mouseup", handleMouseUp);
+          canvas.removeEventListener("mouseleave", handleMouseLeave);
+        }
       };
     }
-  }, [isDrawing]);
+  }, [canvasRef]);
 
   return { isDrawing };
 };
